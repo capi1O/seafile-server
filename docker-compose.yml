@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  seafile:
+    image: foxel/seafile:6.3.3
+    container_name: seafile
+    restart: unless-stopped
+    environment:
+      - "SEAFILE_URL=https://${SEAFILE_DOMAIN}"
+    links:
+      - mysql
+    volumes:
+      - seafile-data:/seafile
+      # - $PWD/nginx-seafile.conf:/etc/nginx/sites-available/seafile.conf
+      # - $PWD/seahub_settings.py:/seafile/conf/seahub_settings.py
+      # - $PWD/seafdav.conf:/seafile/conf/seafdav.conf
+    networks:
+      - letsencrypt_nginx-net
+  mysql:
+    image: mysql:5.7
+    container_name: seafile-mysql 
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+    volumes:
+      - seafile-db:/var/lib/mysql
+    networks:
+      - letsencrypt_nginx-net
+
+volumes:
+  seafile-db:
+    external: true
+  seafile-data:
+    external: true
+
+networks:
+  letsencrypt_nginx-net:
+    external: true
