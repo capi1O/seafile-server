@@ -47,9 +47,6 @@ server
 
 # fill required env vars in .env
 
-`docker-compose up -d`
-
-# seafile-mysql | GENERATED ROOT PASSWORD: xxxxxxxxxxxxxxxxxxxx
-SEAFILE_MYSQL_ROOT_PASSWORD=$(docker-compose mysql | grep 'GENERATED ROOT PASSWORD') # TODO : better parsing
-echo $SEAFILE_MYSQL_ROOT_PASSWORD >> docker compose exec -it seafile setup
-
+echo "${SEAFILE_ADMIN_PASSWORD}" | docker secret create seafile_admin_password -
+echo seafile && $SEAFILE_PRO_DOCKER_PASSWORD >> docker login docker.seadrive.org
+docker-compose up -d
